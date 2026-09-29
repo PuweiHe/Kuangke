@@ -1,0 +1,44 @@
+name: Offline portfolio checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  publishable-tree:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Privacy and syntax checks across the repository
+        run: python scripts/check_publishable_tree.py
+  project:
+    name: ${{ matrix.project }} / Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+        project:
+          - investment-risk-monitor-unified
+          - wealth-agent
+          - business-analytics-agent
+          - database-job-mutex
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      ENABLE_EXTERNAL_SERVICES: 'false'
+      ENABLE_HISTORY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Syntax and privacy-pattern checks
+        run: python scripts/check_privacy.py
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Synthetic demo
+        run: python demo.py

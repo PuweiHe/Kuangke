@@ -1,0 +1,2 @@
+monitor_id,monitor_type,monitor_item,monitor_title,threshold,scope,is_enabled
+IR-RC-0003,investment_ratio,Holding ratio,Example financial product ratio,75%,"[""P001"", ""P002""]",1

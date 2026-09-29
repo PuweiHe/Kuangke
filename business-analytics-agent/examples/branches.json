@@ -1,0 +1,27 @@
+[
+  {
+    "branch_id": "BRANCH001",
+    "year": 2024,
+    "revenue_million": 40
+  },
+  {
+    "branch_id": "BRANCH001",
+    "year": 2025,
+    "revenue_million": 50
+  },
+  {
+    "branch_id": "BRANCH002",
+    "year": 2024,
+    "revenue_million": 20
+  },
+  {
+    "branch_id": "BRANCH002",
+    "year": 2025,
+    "revenue_million": 30
+  },
+  {
+    "branch_id": "BRANCH003",
+    "year": 2025,
+    "revenue_million": 20
+  }
+]

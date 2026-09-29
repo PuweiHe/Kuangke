@@ -1,0 +1,33 @@
+# Disposable integration services. Credentials are demo-only and loopback-bound.
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: risk_monitor_test
+      MYSQL_USER: demo_user
+      MYSQL_PASSWORD: local_test_only
+      MYSQL_ROOT_PASSWORD: local_root_only
+    ports:
+      - '127.0.0.1:13306:3306'
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-plocal_root_only']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    tmpfs:
+      - /var/lib/mysql
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: risk_monitor_test
+      POSTGRES_USER: demo_user
+      POSTGRES_PASSWORD: local_test_only
+    ports:
+      - '127.0.0.1:15432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U demo_user -d risk_monitor_test']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    tmpfs:
+      - /var/lib/postgresql/data

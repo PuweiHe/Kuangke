@@ -1,0 +1,650 @@
+[
+  {
+    "id": "SCENARIO-001",
+    "module": "基金比较",
+    "intent": "多产品+多周期业绩比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-002",
+    "module": "基金比较",
+    "intent": "多产品静态要素比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-003",
+    "module": "基金比较",
+    "intent": "先筛选后比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-004",
+    "module": "基金比较",
+    "intent": "基金经理画像比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-005",
+    "module": "基金比较",
+    "intent": "基金公司静态指标比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-006",
+    "module": "基金比较",
+    "intent": "同策略静态要素比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-007",
+    "module": "基金比较",
+    "intent": "多周期历史不足处理",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-008",
+    "module": "基金比较",
+    "intent": "公私募跨口径比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-009",
+    "module": "基金比较",
+    "intent": "经理产品召回+业绩比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-010",
+    "module": "基金比较",
+    "intent": "同基金多份额比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-011",
+    "module": "搜索与兜底",
+    "intent": "错别字+繁简体模糊匹配",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-012",
+    "module": "搜索与兜底",
+    "intent": "口语简称召回+消歧",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-013",
+    "module": "搜索与兜底",
+    "intent": "代码纠错+市场后缀消歧",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-014",
+    "module": "搜索与兜底",
+    "intent": "产品A/C份额消歧",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-015",
+    "module": "搜索与兜底",
+    "intent": "无匹配产品兜底",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-016",
+    "module": "搜索与兜底",
+    "intent": "交易资格/可售性边界",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-017",
+    "module": "搜索与兜底",
+    "intent": "未映射标签查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-018",
+    "module": "搜索与兜底",
+    "intent": "冲突条件+未接入字段",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-019",
+    "module": "搜索与兜底",
+    "intent": "歧义澄清",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-020",
+    "module": "搜索与兜底",
+    "intent": "上下文继承+条件追加",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-021",
+    "module": "搜索与兜底",
+    "intent": "上一轮结果引用+跨接口比较",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-022",
+    "module": "搜索与兜底",
+    "intent": "中文数字解析+单位换算",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-023",
+    "module": "搜索与兜底",
+    "intent": "接口异常+部分成功",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-024",
+    "module": "搜索与兜底",
+    "intent": "不支持预测+投资建议边界",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-025",
+    "module": "基金经理",
+    "intent": "公司限定+经理排行",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-026",
+    "module": "基金经理",
+    "intent": "经理规模排序+信息展示",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-027",
+    "module": "基金经理",
+    "intent": "经理多条件筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-028",
+    "module": "基金经理",
+    "intent": "基金经理基础画像",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-029",
+    "module": "基金经理",
+    "intent": "经理当前产品列表",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-030",
+    "module": "基金经理",
+    "intent": "基金经理模糊搜索+消歧",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-031",
+    "module": "基金经理",
+    "intent": "经理业绩信息查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-032",
+    "module": "基金经理",
+    "intent": "经理历史产品列表",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-033",
+    "module": "基金公司",
+    "intent": "公司规模排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-034",
+    "module": "基金公司",
+    "intent": "公司多条件筛选+排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-035",
+    "module": "基金公司",
+    "intent": "未映射公司指标排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-036",
+    "module": "基金公司",
+    "intent": "公司基础画像",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-037",
+    "module": "基金公司",
+    "intent": "公司产品结构统计",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-038",
+    "module": "基金公司",
+    "intent": "公司搜索+别名匹配",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-039",
+    "module": "基金公司",
+    "intent": "公司股东信息查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-040",
+    "module": "基金公司",
+    "intent": "公司多接口完整回归",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-041",
+    "module": "基金查询",
+    "intent": "单产品详情查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-042",
+    "module": "基金查询",
+    "intent": "资产配置详情",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-043",
+    "module": "基金查询",
+    "intent": "重仓股明细",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-044",
+    "module": "基金查询",
+    "intent": "基金经理子项查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-045",
+    "module": "基金查询",
+    "intent": "概率分布查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-046",
+    "module": "基金查询",
+    "intent": "相似产品召回",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-047",
+    "module": "基金查询",
+    "intent": "行业配置明细",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-048",
+    "module": "基金查询",
+    "intent": "私募未映射行业查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-049",
+    "module": "基金查询",
+    "intent": "最新净值+日涨跌+仓位",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-050",
+    "module": "基金查询",
+    "intent": "费率+特殊类型详情",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-051",
+    "module": "基金查询",
+    "intent": "代码反查产品",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-052",
+    "module": "基金查询",
+    "intent": "同名多份额候选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-053",
+    "module": "基金查询",
+    "intent": "资产配置持有市值查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-054",
+    "module": "基金查询",
+    "intent": "fundbaseinfo完整字段回归",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-055",
+    "module": "基金查询",
+    "intent": "相似度分项查询",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-056",
+    "module": "基金查询",
+    "intent": "fundwinRate完整字段回归",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-057",
+    "module": "基金查询",
+    "intent": "veststock完整字段回归",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-058",
+    "module": "基金查询",
+    "intent": "investAsset完整字段回归",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-059",
+    "module": "基金筛选",
+    "intent": "分类筛选+区间收益排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-060",
+    "module": "基金筛选",
+    "intent": "细分策略识别+筛选排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-061",
+    "module": "基金筛选",
+    "intent": "多条件AND+排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-062",
+    "module": "基金筛选",
+    "intent": "公司+分类+排名筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-063",
+    "module": "基金筛选",
+    "intent": "状态+分类+风险收益指标排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-064",
+    "module": "基金筛选",
+    "intent": "日涨跌幅排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-065",
+    "module": "基金筛选",
+    "intent": "经理筛选+在管状态+排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-066",
+    "module": "基金筛选",
+    "intent": "公私募识别+规模+收益排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-067",
+    "module": "基金筛选",
+    "intent": "多条件筛选+风险区间",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-068",
+    "module": "基金筛选",
+    "intent": "开放日筛选+日期排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-069",
+    "module": "基金筛选",
+    "intent": "费率区间+规模排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-070",
+    "module": "基金筛选",
+    "intent": "特殊类型+指数筛选+规模排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-071",
+    "module": "基金筛选",
+    "intent": "仓位+状态+收益排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-072",
+    "module": "基金筛选",
+    "intent": "仓位+风险OR+规模排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-073",
+    "module": "基金筛选",
+    "intent": "投资顾问+状态筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-074",
+    "module": "基金筛选",
+    "intent": "到期日范围+状态筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-075",
+    "module": "基金筛选",
+    "intent": "封闭期区间+规模排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-076",
+    "module": "基金筛选",
+    "intent": "赎回开放日筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-077",
+    "module": "基金筛选",
+    "intent": "预约申购起止日判断",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-078",
+    "module": "基金筛选",
+    "intent": "预约赎回起止日判断",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-079",
+    "module": "基金筛选",
+    "intent": "业绩报酬方法筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-080",
+    "module": "基金筛选",
+    "intent": "超额收益区间+排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-081",
+    "module": "基金筛选",
+    "intent": "超额回撤区间筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-082",
+    "module": "基金筛选",
+    "intent": "跟踪误差+信息比率排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-083",
+    "module": "基金筛选",
+    "intent": "信息比率+规模筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-084",
+    "module": "基金筛选",
+    "intent": "超额收益同类排名筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-085",
+    "module": "基金筛选",
+    "intent": "超额回撤同类排名筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-086",
+    "module": "基金筛选",
+    "intent": "跟踪误差同类排名筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-087",
+    "module": "基金筛选",
+    "intent": "信息比率排名+收益排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-088",
+    "module": "基金筛选",
+    "intent": "多排名AND筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-089",
+    "module": "基金筛选",
+    "intent": "行业+比例筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-090",
+    "module": "基金筛选",
+    "intent": "行业比例+收益区间排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-091",
+    "module": "基金筛选",
+    "intent": "经理维度+产品筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-092",
+    "module": "基金筛选",
+    "intent": "经理区间筛选+产品关联",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-093",
+    "module": "基金筛选",
+    "intent": "日期+规模+状态+收益排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-094",
+    "module": "基金筛选",
+    "intent": "状态+成立日期升序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-095",
+    "module": "基金筛选",
+    "intent": "规模下限+升序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-096",
+    "module": "基金筛选",
+    "intent": "产品简称+公司校验",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-097",
+    "module": "基金筛选",
+    "intent": "全称关键词+风险筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-098",
+    "module": "基金筛选",
+    "intent": "跨境类型+收益排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-099",
+    "module": "基金筛选",
+    "intent": "特殊类型排除+规模排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-100",
+    "module": "基金筛选",
+    "intent": "多级排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-101",
+    "module": "基金筛选",
+    "intent": "公私募状态归一+排除",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-102",
+    "module": "基金筛选",
+    "intent": "同条件分组筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-103",
+    "module": "基金筛选",
+    "intent": "分类OR+风险OR+排序",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-104",
+    "module": "基金筛选",
+    "intent": "极端冲突条件",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-105",
+    "module": "基金筛选",
+    "intent": "分页+上下文继承",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-106",
+    "module": "基金筛选",
+    "intent": "主次排序+稳定性",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-107",
+    "module": "基金筛选",
+    "intent": "未接入指标筛选",
+    "status": "design_only_not_executed"
+  },
+  {
+    "id": "SCENARIO-108",
+    "module": "基金筛选",
+    "intent": "未接入绝对最大回撤筛选",
+    "status": "design_only_not_executed"
+  }
+]

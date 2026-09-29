@@ -1,0 +1,47 @@
+[
+  {
+    "id": "FUND001",
+    "name": "Example Index A",
+    "category": "equity",
+    "assets_million": 120,
+    "return_1y": 0.08,
+    "as_of": "2025-01-01",
+    "synthetic": true
+  },
+  {
+    "id": "FUND002",
+    "name": "Example Index C",
+    "category": "equity",
+    "assets_million": 80,
+    "return_1y": 0.08,
+    "as_of": "2025-01-01",
+    "synthetic": true
+  },
+  {
+    "id": "FUND003",
+    "name": "Example Bond",
+    "category": "bond",
+    "assets_million": 200,
+    "return_1y": 0.03,
+    "as_of": "2025-01-01",
+    "synthetic": true
+  },
+  {
+    "id": "FUND004",
+    "name": "Example New Fund",
+    "category": "equity",
+    "assets_million": 40,
+    "return_1y": null,
+    "as_of": "2025-01-01",
+    "synthetic": true
+  },
+  {
+    "id": "FUND005",
+    "name": "Example Global",
+    "category": "equity",
+    "assets_million": 60,
+    "return_1y": -0.02,
+    "as_of": "2025-01-01",
+    "synthetic": true
+  }
+]

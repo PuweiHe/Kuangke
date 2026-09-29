@@ -1,0 +1,12 @@
+[
+  "mge_org_info",
+  "mge_org_key",
+  "mge_org_list",
+  "mge_quota_filter_asset",
+  "mge_quota_filter_customer_size",
+  "mge_quota_filter_employee",
+  "mge_quota_filter_financial",
+  "mge_quota_filter_performance",
+  "mge_quota_filter_sales",
+  "mge_quota_filter_transaction"
+]

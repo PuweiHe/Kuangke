@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Branch performance | Portfolio demo</title>
+  <link rel="stylesheet" href="/style.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <main class="layout">
+    <header class="masthead">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">K</span><span>Business systems portfolio</span></div>
+      <span class="dataset-tag">SYNTHETIC DATASET · LOCAL DEMO</span>
+    </header>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">OPERATING ANALYTICS / BRANCH PERFORMANCE</p>
+      <h1 id="page-title">From a business question to a traceable metric.</h1>
+      <p>Explore branch revenue, system share, and year-over-year growth. Each number is read from a local SQLite table and calculated by a deterministic backend rule.</p>
+    </section>
+    <section class="workspace" aria-label="Performance report">
+      <div class="controls">
+        <div><label for="year">Reporting year</label><select id="year" disabled></select></div>
+        <div><label for="branch">Branch</label><select id="branch" disabled><option value="">All branches</option></select></div>
+        <p id="status" role="status" aria-live="polite">Loading sample metrics…</p>
+      </div>
+      <div class="metrics" aria-label="Key figures">
+        <article><span>Total revenue</span><strong id="total">—</strong><small>million · selected year</small></article>
+        <article><span>Branches reported</span><strong id="count">—</strong><small>distinct branch IDs</small></article>
+        <article><span>Selected branch share</span><strong id="share">—</strong><small>of annual total</small></article>
+        <article><span>Selected branch growth</span><strong id="growth">—</strong><small>vs. prior year</small></article>
+      </div>
+      <div class="table-heading"><div><p class="eyebrow">SOURCE RECORDS → CALCULATED VIEW</p><h2>Branch breakdown</h2></div><span id="year-label"></span></div>
+      <div class="table-scroll"><table><thead><tr><th scope="col">Rank</th><th scope="col">Branch</th><th scope="col">Revenue</th><th scope="col">Share</th><th scope="col">YoY growth</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <p class="note">An unavailable prior-year observation is shown as “No baseline.” A zero annual total leaves share undefined. These are data states, not zero growth.</p>
+    </section>
+    <footer>Portfolio reconstruction · Python API · parameterized SQLite queries · vanilla JavaScript</footer>
+  </main>
+</body>
+</html>

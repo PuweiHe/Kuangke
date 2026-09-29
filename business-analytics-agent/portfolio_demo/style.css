@@ -1,0 +1,263 @@
+:root {
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:#172539;
+  background:#f5f4ef;
+  font-synthesis:none
+}
+* {
+  box-sizing:border-box
+}
+body {
+  margin:0
+}
+.layout {
+  max-width:1180px;
+  margin:auto;
+  padding:0 32px
+}
+.masthead {
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #d7ddd9
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.01em
+}
+.brand-mark {
+  display:grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  background:#173b37;
+  color:#fff;
+  font-family:Georgia,serif;
+  font-size:19px
+}
+.dataset-tag {
+  color:#365f57;
+  border:1px solid #b4c9c0;
+  padding:7px 10px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.12em
+}
+.intro {
+  padding:58px 0 48px;
+  max-width:770px
+}
+.eyebrow {
+  margin:0 0 14px;
+  color:#2a655b;
+  font-size:11px;
+  letter-spacing:.18em;
+  font-weight:750
+}
+.intro h1 {
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(40px,5vw,66px);
+  line-height:1.07;
+  font-weight:400;
+  letter-spacing:-.045em;
+  margin:0 0 22px
+}
+.intro>p:last-child {
+  max-width:660px;
+  color:#596b73;
+  line-height:1.65;
+  font-size:16px
+}
+.workspace {
+  background:#fff;
+  border:1px solid #d8dfdc;
+  box-shadow:0 15px 45px rgba(35,59,54,.05);
+  margin-bottom:35px
+}
+.controls {
+  display:flex;
+  gap:22px;
+  align-items:end;
+  padding:28px 30px;
+  border-bottom:1px solid #e2e8e4
+}
+.controls>div {
+  min-width:190px
+}
+label {
+  display:block;
+  color:#516460;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:8px
+}
+select {
+  width:100%;
+  height:42px;
+  padding:0 12px;
+  color:#172539;
+  background:#fff;
+  border:1px solid #aebcb7;
+  border-radius:2px;
+  font-size:14px
+}
+select:focus-visible {
+  outline:3px solid #a3c8bd;
+  outline-offset:2px
+}
+#status {
+  margin:0 0 10px auto;
+  color:#60736d;
+  font-size:13px
+}
+.metrics {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid #e2e8e4
+}
+.metrics article {
+  padding:28px 30px;
+  min-height:145px;
+  border-right:1px solid #e2e8e4
+}
+.metrics article:last-child {
+  border-right:0
+}
+.metrics span,.metrics small {
+  display:block;
+  color:#62726d
+}
+.metrics span {
+  font-size:12px;
+  font-weight:700
+}
+.metrics strong {
+  display:block;
+  margin:13px 0 5px;
+  font-family:Georgia,serif;
+  font-weight:400;
+  font-size:34px;
+  letter-spacing:-.03em
+}
+.metrics small {
+  font-size:11px
+}
+.table-heading {
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  padding:34px 30px 18px
+}
+.table-heading .eyebrow {
+  margin-bottom:8px
+}
+h2 {
+  font-family:Georgia,serif;
+  font-size:28px;
+  font-weight:400;
+  margin:0
+}
+#year-label {
+  color:#687972;
+  font-size:12px
+}
+.table-scroll {
+  overflow-x:auto
+}
+table {
+  border-collapse:collapse;
+  width:100%;
+  min-width:640px
+}
+th,td {
+  text-align:left;
+  padding:14px 30px;
+  border-bottom:1px solid #edf0ee;
+  font-size:13px
+}
+th {
+  background:#f8faf8;
+  color:#65766e;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.09em
+}
+td:first-child {
+  color:#8c9b96
+}
+td:nth-child(n+3),th:nth-child(n+3) {
+  text-align:right
+}
+tr.selected {
+  background:#edf5f1
+}
+tr:last-child td {
+  border-bottom:0
+}
+.note {
+  margin:0;
+  padding:19px 30px 27px;
+  color:#667771;
+  font-size:12px;
+  line-height:1.5
+}
+footer {
+  color:#7a8983;
+  font-size:12px;
+  padding:0 0 40px
+}
+@media(max-width:760px) {
+  .layout {
+    padding:0 16px
+  }
+  .masthead {
+    height:auto;
+    min-height:70px;
+    gap:15px
+  }
+  .dataset-tag {
+    font-size:9px;
+    text-align:right
+  }
+  .intro {
+    padding:40px 0 30px
+  }
+  .controls {
+    flex-wrap:wrap;
+    padding:20px
+  }
+  .controls>div {
+    flex:1 1 150px
+  }
+  #status {
+    margin:0;
+    width:100%
+  }
+  .metrics {
+    grid-template-columns:repeat(2,1fr)
+  }
+  .metrics article {
+    border-bottom:1px solid #e2e8e4;
+    padding:20px
+  }
+  .metrics article:nth-child(2) {
+    border-right:0
+  }
+  .metrics article:nth-child(n+3) {
+    border-bottom:0
+  }
+  .table-heading {
+    padding:25px 20px 15px
+  }
+  th,td {
+    padding:13px 18px
+  }
+  .note {
+    padding:18px 20px 24px
+  }
+}

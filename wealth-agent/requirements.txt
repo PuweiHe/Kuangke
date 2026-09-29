@@ -1,0 +1,17 @@
+dirtyjson==1.0.8
+fastapi==0.115.12
+holidays==0.72
+httpx==0.28.1
+langchain==1.2.6
+langchain-openai==1.1.7
+langgraph==1.0.7
+loguru==0.7.3
+pydantic==2.11.3
+python-dotenv==1.1.0
+pytz==2025.2
+redis==5.2.1
+requests==2.32.3
+sse-starlette==2.2.1
+uvicorn==0.34.1
+websocket-client==1.8.0
+langchain-deepseek==1.1.0

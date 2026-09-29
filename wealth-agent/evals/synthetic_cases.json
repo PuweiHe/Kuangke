@@ -1,0 +1,142 @@
+[
+  {
+    "id": "resolve_exact",
+    "request": {
+      "action": "resolve",
+      "query": "FUND001"
+    },
+    "expected_status": "resolved",
+    "expected_ids": [
+      "FUND001"
+    ]
+  },
+  {
+    "id": "resolve_ambiguous",
+    "request": {
+      "action": "resolve",
+      "query": "Example Index"
+    },
+    "expected_status": "ambiguous",
+    "expected_ids": [
+      "FUND001",
+      "FUND002"
+    ]
+  },
+  {
+    "id": "resolve_missing",
+    "request": {
+      "action": "resolve",
+      "query": "Imaginary Fund"
+    },
+    "expected_status": "not_found",
+    "expected_ids": []
+  },
+  {
+    "id": "resolve_case",
+    "request": {
+      "action": "resolve",
+      "query": "fund003"
+    },
+    "expected_status": "resolved",
+    "expected_ids": [
+      "FUND003"
+    ]
+  },
+  {
+    "id": "screen_equity",
+    "request": {
+      "action": "screen",
+      "category": "equity",
+      "limit": 2
+    },
+    "expected_status": "ok",
+    "expected_ids": [
+      "FUND001",
+      "FUND002"
+    ]
+  },
+  {
+    "id": "screen_assets",
+    "request": {
+      "action": "screen",
+      "min_assets_million": 100
+    },
+    "expected_status": "ok",
+    "expected_ids": [
+      "FUND001",
+      "FUND003"
+    ]
+  },
+  {
+    "id": "screen_empty",
+    "request": {
+      "action": "screen",
+      "min_assets_million": 999
+    },
+    "expected_status": "ok",
+    "expected_ids": []
+  },
+  {
+    "id": "screen_null_last",
+    "request": {
+      "action": "screen",
+      "category": "equity"
+    },
+    "expected_status": "ok",
+    "expected_ids": [
+      "FUND001",
+      "FUND002",
+      "FUND005",
+      "FUND004"
+    ]
+  },
+  {
+    "id": "compare_partial",
+    "request": {
+      "action": "compare",
+      "ids": [
+        "FUND001",
+        "MISSING"
+      ]
+    },
+    "expected_status": "partial",
+    "expected_ids": [
+      "FUND001"
+    ]
+  },
+  {
+    "id": "compare_duplicate",
+    "request": {
+      "action": "compare",
+      "ids": [
+        "FUND002",
+        "FUND002"
+      ]
+    },
+    "expected_status": "ok",
+    "expected_ids": [
+      "FUND002"
+    ]
+  },
+  {
+    "id": "compare_missing_history",
+    "request": {
+      "action": "compare",
+      "ids": [
+        "FUND004"
+      ]
+    },
+    "expected_status": "ok",
+    "expected_ids": [
+      "FUND004"
+    ]
+  },
+  {
+    "id": "prediction_unsupported",
+    "request": {
+      "action": "guaranteed_future_return"
+    },
+    "expected_status": "unsupported",
+    "expected_ids": []
+  }
+]

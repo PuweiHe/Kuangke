@@ -1,0 +1,2 @@
+# Optional Excel reader; CSV ingestion uses only the standard library.
+openpyxl>=3.1,<4
