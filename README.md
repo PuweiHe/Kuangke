@@ -2,9 +2,9 @@
 
 [![Offline checks](https://github.com/PuweiHe/financial-software-engineering/actions/workflows/portfolio.yml/badge.svg)](https://github.com/PuweiHe/financial-software-engineering/actions/workflows/portfolio.yml) [![Database integration checks](https://github.com/PuweiHe/financial-software-engineering/actions/workflows/database.yml/badge.svg)](https://github.com/PuweiHe/financial-software-engineering/actions/workflows/database.yml)
 
-My internship work centered on turning financial business requirements into Python services, SQL-backed workflows, and domain agents. This repository presents generalized, synthetic reconstructions of three representative workflows: internal fund research, branch-performance analysis, and institutional investment monitoring. A reviewer can follow each business problem into code and tests without access to a customer's systems.
+This portfolio shows how I turn financial business questions into software: a runnable browser-to-API-to-SQL analytics path, domain agents that route research and operating-metric requests, and a configurable investment monitor with database and concurrency checks. The examples are generalized and use synthetic data so reviewers can inspect the implementation without customer systems.
 
-**Review in five minutes:** [run the full-stack branch analytics demo](business-analytics-agent/README.md#try-the-full-stack-business-scenario), then follow the [code review guide](docs/REVIEW_GUIDE.md) from a business request through the UI, API, SQL, agent routing, and focused tests. The runnable browser path and the retained LLM agent services have different verification scopes; the guide identifies both.
+**Start with working code:** [run the branch analytics demo](business-analytics-agent/README.md#try-the-full-stack-business-scenario) to trace one request through the UI, HTTP API, SQL, and business rules. Then use the [code review guide](docs/REVIEW_GUIDE.md) to inspect agent routing and risk-monitor persistence. The demo runs without credentials; the retained LLM agents need separately configured model and data services.
 
 ## Start with a working product path
 
@@ -22,8 +22,8 @@ Choose 2025 and `BRANCH003`: the sample branch contributes 20% of annual revenue
 
 | Workflow | Business result represented in this repository | Inspectable engineering evidence |
 | --- | --- | --- |
-| [Wealth Research Agent](wealth-agent/) | Internal research queries retain multiple fund matches and unavailable return history instead of presenting an unsupported comparison. | [Entity resolution and bounded lookup](wealth-agent/agent/entity_recognizer.py), [three specialist tool groups](wealth-agent/agent/mutil_agent.py), [synthetic cases](wealth-agent/evals/synthetic_cases.json), FastAPI/SSE. |
 | [Business Analytics Agent](business-analytics-agent/) | Branch revenue, share, and year-over-year growth remain consistent across periods; an absent baseline stays undefined. | [Four tool domains](business-analytics-agent/agent/mutil_agent.py), [HTTP/SQL browser demo](business-analytics-agent/portfolio_demo/), [metric and API tests](business-analytics-agent/tests/test_portfolio_demo.py). |
+| [Wealth Research Agent](wealth-agent/) | Internal research queries retain multiple fund matches and unavailable return history instead of presenting an unsupported comparison. | [Entity resolution and bounded lookup](wealth-agent/agent/entity_recognizer.py), [three specialist tool groups](wealth-agent/agent/mutil_agent.py), [synthetic cases](wealth-agent/evals/synthetic_cases.json), FastAPI/SSE. |
 | [Investment Risk Monitor](investment-risk-monitor-unified/) | Institutional risk analysts can review dated checks, historical replay, and explicit missing-data or alert states. | [Configuration-to-result workflow](investment-risk-monitor-unified/docs/CONFIGURATION_WORKFLOW.md), [MySQL/PostgreSQL integration tests](investment-risk-monitor-unified/integration_tests/test_database.py), transactional imports and distributed leases. |
 | [Database Job Mutex](database-job-mutex/) | Concurrent instances do not acquire the same scheduled-job lease; a stale owner cannot release its successor's lease. | [Owner-token lease](database-job-mutex/distributed_mutex_job.py), [stale-release tests](database-job-mutex/tests/test_lease.py). |
 
