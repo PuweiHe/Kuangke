@@ -23,7 +23,7 @@ flowchart LR
 
 Rule classes own calculations; DAOs own retrieval and persistence. Explicit IDs provide predictable dispatch, with class discovery for extension. Discovery caches classes rather than mutable instances so per-run state is not reused inadvertently. Historical replay uses inclusive date ranges and retains failure counts.
 
-Persistence includes separate MySQL and PostgreSQL upsert paths. The broader domain SQL remains oriented toward MySQL and is not a verified portable SQL layer. Several retained DAOs still need parameterization and integration coverage before production use.
+Persistence includes separate MySQL and PostgreSQL upsert paths. The broader domain SQL remains oriented toward MySQL and is not a verified portable SQL layer. Dynamic DAO filter values are now bound parameters. Private-schema queries still need integration coverage before production use. Batch inserts use a single transaction and stable column ordering.
 
 ## Agent services
 
@@ -51,12 +51,10 @@ Both lease examples use conditional updates to claim a job and owner tokens to g
 
 If a process loses its lease but continues writing, token-checked release cannot prevent stale writes. Downstream idempotency and, where needed, fencing are separate requirements. The risk adapter uses application timestamps, so clock skew is another integration consideration. The standalone mutex's two-connection SQLite test covers exclusion and stale release; the risk-monitor suite also exercises the lease with real MySQL and PostgreSQL services.
 
-## Deliberate next steps
+## Current reliability boundaries
 
-1. Extend real database coverage beyond the adapted risk rules and persistence paths.
-2. Define and test data-adapter response schemas, authentication and authorization contracts.
-3. Replace remaining interpolated domain SQL with bound parameters.
-4. Exercise stream cancellation, timeouts and malformed model/tool responses end to end.
-5. Resolve and lock live dependencies before measuring latency or throughput.
+The API validates bounded request fields and redacts rejected values in validation errors. Wealth entity extraction uses a Pydantic schema; up to ten names are resolved with at most three concurrent requests. Request-local cards prevent same-ID requests from sharing state. Text remains opaque inside explicit SSE envelopes; errors become visible terminal events.
 
-These are remaining engineering tasks, not capabilities claimed by this portfolio.
+Both agent services await async execution, cap request duration and propagate cancellation. HTTP/model calls have separate timeouts. Optional history uses transactional append/trim/expiry. Code execution needs an additional operator opt-in. Health endpoints indicate configuration state, not external provider readiness.
+
+See [the engineering review](ENGINEERING_REVIEW.md) for the resulting diagram, tradeoffs and remaining deployment work.

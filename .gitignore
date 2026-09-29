@@ -13,3 +13,7 @@
 **/*.key
 **/*.sqlite*
 work/
+**/.ruff_cache/
+**/.mypy_cache/
+**/node_modules/
+**/test-results/

@@ -70,7 +70,7 @@ class PortfolioDemoTests(unittest.TestCase):
 
 class RepositoryTests(unittest.TestCase):
     def test_duplicate_observation_rejected_by_database(self):
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValueError):
             MetricsRepository(RECORDS + [RECORDS[-1]])
 
     def test_parameterized_branch_lookup(self):

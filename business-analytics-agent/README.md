@@ -41,12 +41,26 @@ These commands require only Python 3.11 or newer. Synthetic branch-year records 
 
 ## Backend adaptation
 
-Install `requirements.txt` in a virtual environment and export the variables in `.env.example`. External services are off by default. A live run requires your own model and data APIs, `ENABLE_EXTERNAL_SERVICES=true`, and `DATA_API_PATHS_JSON` matching the names in `config/endpoint_names.json`. API response shapes must match the retained tool adapters. Optional entity preprocessing uses `ENTITY_API_URL` without a global cache of user questions. Optional calculation/chart tools require E2B and object-storage credentials; clients are created lazily.
+Install `requirements.txt` in a virtual environment and export the variables in `.env.example`. External services are off by default. A live run requires your own model and data APIs, `ENABLE_EXTERNAL_SERVICES=true`, and `DATA_API_PATHS_JSON` matching the names in `config/endpoint_names.json`. API response shapes must match the retained tool adapters. Optional entity preprocessing uses `ENTITY_API_URL` without a global cache of user questions. Optional calculation/chart tools require requirements-sandbox.txt, E2B and object-storage credentials, and a separate ENABLE_CODE_EXECUTION=true operator opt-in; clients are created lazily.
 
 Run `python main.py` to bind to loopback port 8000. Routes are `/api/conversation/portfolio` and `/api/conversation/portfolio/stream`. The data service must authenticate incoming tokens and enforce record-level authorization. History is opt-in and expires after one hour. Audit writes are disabled and application logs exclude request/response payloads.
 
 The report tool returns a request/card descriptor; it does not generate a Word or PDF file locally. No original frontend source was present in the supplied project; the runnable browser demo above was newly written for this portfolio. Original screenshots, deployment configuration, bulk question runner, private prompts and unused alternative agent code were excluded.
 
-## Verification scope
+## Service contracts and verification
 
-The offline example, metric tests, browser-demo HTTP tests, configuration tests, syntax checks and privacy-pattern checks are verified and included in CI. A sandbox that prohibits loopback sockets skips only the HTTP tests; repository tests still run. Live LLM/data/Redis/E2B/object-storage behavior is unverified. Dependency pins are inherited from the supplied project rather than a newly resolved environment.
+`GET /healthz` reports process/configuration state; `/docs` exposes the request schema. Conversation endpoints return 422 for invalid inputs, 503 when disabled, 502 for upstream failures and 504 for timeout. Streaming errors use an explicit error event followed by `stream end`. Both response modes await async specialist tools.
+
+`requirements.in` lists direct dependencies and `requirements.txt` pins the resolved service set. After installation, run `python -m unittest discover -s service_tests -v`. Those tests exercise real API and graph execution with controlled model/tool responses. Optional sandbox/object-storage dependencies are separate and were not live-tested.
+
+For browser checks, install Node 22+ and pnpm, then run:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+The three browser cases cover mobile branch selection, failed requests/retry, and empty data through the local server. The browser remains independent of the live LLM service.
+
+The Docker image starts the FastAPI service as a nonroot user on port 8000 with external services disabled. Build with `docker build -t operations-agent .`, then run `docker run --rm -p 127.0.0.1:8000:8000 operations-agent`. Production use needs trusted authentication and data authorization. See [verification scope](../docs/VERIFICATION.md) for local/CI results and limitations.

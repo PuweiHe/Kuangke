@@ -1,19 +1,40 @@
-import contextvars
+"""Each request owns its cards, even when clients reuse a request ID."""
+
+from contextlib import contextmanager
+from contextvars import ContextVar
 import json
-from typing import Any
-_request_id_ctx: contextvars.ContextVar[str] = contextvars.ContextVar('request_id', default='')
-_card_registry: dict[str, list[str]] = {}
 
-def set_request_id(request_id: str):
-    _request_id_ctx.set(request_id)
+_cards: ContextVar[list | None] = ContextVar("cards", default=None)
+_request_id: ContextVar[str] = ContextVar("request_id", default="")
 
-def get_request_id() -> str:
-    return _request_id_ctx.get()
 
-def store_card(card: dict[str, Any]):
-    rid = _request_id_ctx.get()
-    if rid:
-        _card_registry.setdefault(rid, []).append(json.dumps(card, ensure_ascii=False))
+@contextmanager
+def card_scope(request_id):
+    cards_token = _cards.set([])
+    id_token = _request_id.set(request_id)
+    try:
+        yield
+    finally:
+        _cards.reset(cards_token)
+        _request_id.reset(id_token)
 
-def pop_cards(request_id: str) -> list[str]:
-    return _card_registry.pop(request_id, [])
+
+def get_request_id():
+    return _request_id.get()
+
+
+def store_card(card):
+    cards = _cards.get()
+    if cards is not None:
+        encoded = json.dumps(card, ensure_ascii=False, allow_nan=False)
+        if encoded not in cards:
+            cards.append(encoded)
+
+
+def pop_cards(request_id):
+    cards = _cards.get()
+    if cards is None or request_id != _request_id.get():
+        return []
+    result = cards[:]
+    cards.clear()
+    return result

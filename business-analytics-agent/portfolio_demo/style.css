@@ -261,3 +261,6 @@ footer {
     padding:18px 20px 24px
   }
 }
+
+#retry { padding: 10px 16px; border: 1px solid #365f57; background: #fff; color: #173b37; cursor: pointer; }
+#retry:focus-visible { outline: 3px solid #a3c8bd; outline-offset: 2px; }

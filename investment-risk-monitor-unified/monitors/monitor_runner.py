@@ -305,8 +305,17 @@ class MonitorRunner:
                 )
                 results.append(result)
 
-            logger.info(f"监控指标 {monitor_id} 执行完成: {results[-1].get('status')}")
-            return results[-1]
+            if len(results) == 1:
+                return results[0]
+            failed = sum(result.get("status") != "success" for result in results)
+            return {
+                "monitor_id": monitor_id,
+                "status": "error" if failed else "success",
+                "total_count": len(results),
+                "success_count": len(results) - failed,
+                "fail_count": failed,
+                "results": results,
+            }
 
         except Exception as e:
             logger.error(f"执行监控指标 {monitor_id} 失败: {e}")

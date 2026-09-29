@@ -3,8 +3,9 @@
 
 提供通用的日期查询和数据访问功能
 """
-from typing import Optional
+
 from db.query_adapter import query_one
+
 
 class RiskTypesDAO:
     """
@@ -27,6 +28,10 @@ class RiskTypesDAO:
         str
             前一天的日期，格式: YYYY-MM-DD
         """
-        sql = '\n            SELECT MAX(p_dt) AS pre_date\n            FROM position_snapshot\n            WHERE p_dt < %s\n        '
+        sql = """
+            SELECT MAX(p_dt) AS pre_date
+            FROM position_snapshot
+            WHERE p_dt < %s
+        """
         result = query_one(sql, (biz_date,))
-        return result['pre_date'] if result else None
+        return result["pre_date"] if result else None

@@ -35,10 +35,22 @@ Install `requirements.txt` into a virtual environment. Export the variables docu
 
 Run `python main.py`. The default bind address is loopback on port 8000. Chat routes are `/api/conversation/wealth` and `/api/conversation/wealth/stream`; inspect `model/ChatBody.py` for the request schema. The incoming token is forwarded to the configured data service, which must authenticate and authorize requests. User-provided IDs are not proof of authorization.
 
-History is disabled by default; enabling `ENABLE_HISTORY=true` uses Redis with a one-hour expiry and a user/session namespace. Original audit-service writes are replaced by no-op adapters, and application payloads are excluded from logs. Customer tools remain extension examples and are not registered with the supervisor.
+History is disabled by default; enabling `ENABLE_HISTORY=true` uses Redis with a one-hour expiry and a user/session namespace. Unused private audit-service scaffolding has been removed, and application payloads are excluded from logs. Customer tools remain extension examples and are not registered with the supervisor.
 
 Optional speech integration requires `requirements-speech.txt`, `ENABLE_SPEECH=true` and the `SPEECH_*` variables. It is not exercised by the offline demo.
 
-## Verification scope
+## Service contracts and verification
 
-Offline tests and syntax/privacy checks run in the included GitHub Actions workflow. Live LLM, speech, Redis and customer API integration have not been tested in this environment. The inherited dependency pins are starting points from the supplied code, not a newly resolved lockfile. Prompts and examples were rewritten for this portfolio; original production performance is not claimed.
+`GET /healthz` reports process/configuration state; `/docs` exposes the request schema. Conversation endpoints validate bounded questions and identifiers, return 422 for invalid inputs, 503 when disabled, 401 for rejected data credentials, 502 for provider failures and 504 for request timeout. Streaming errors use a `type: error` event followed by `stream end`. Text is never parsed as an event, and card payloads retain their data. Clients must handle error events after the stream opens.
+
+`requirements.in` records direct dependencies; `requirements.txt` pins the resolved service dependency set. Use a separate environment per application. After installation, run:
+
+```bash
+python -m pip install -r requirements-speech.txt
+python -m unittest discover -s service_tests -v
+python evals/evaluate_contracts.py
+```
+
+These tests exercise real API/orchestration boundaries with controlled model/data responses and fake speech sockets. The eight extraction-contract fixtures validate schema behavior, not live model quality. History and live model/data/speech services still need integration verification.
+
+The Docker image starts the FastAPI service as a nonroot user on port 8000 with external services disabled. Build from this directory with `docker build -t wealth-agent .`, then run `docker run --rm -p 127.0.0.1:8000:8000 wealth-agent`. Enable external services only behind a trusted authentication/authorization boundary. See [verification scope](../docs/VERIFICATION.md) for CI and local execution limits.

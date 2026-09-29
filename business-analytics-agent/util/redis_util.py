@@ -3,7 +3,7 @@ import redis
 import json
 from config.config import config
 from langchain_core.messages import HumanMessage, AIMessage
-redis_pool = redis.ConnectionPool(host=config['redis']['host'], port=config['redis']['port'], db=config['redis']['db'], password=config['redis']['password'], max_connections=config['redis']['max_connections'])
+redis_pool = redis.ConnectionPool(host=config['redis']['host'], port=config['redis']['port'], db=config['redis']['db'], password=config['redis']['password'], socket_timeout=5, socket_connect_timeout=3, max_connections=config['redis']['max_connections'])
 
 def get_redis_client():
     return redis.Redis(connection_pool=redis_pool)
@@ -15,9 +15,9 @@ def add_message_to_redis(session_id: str, human_message: str, ai_response: str):
     r = get_redis_client()
     key = f'mge_conversation:{session_id}'
     message = json.dumps({'human': human_message, 'ai': ai_response}, ensure_ascii=False)
-    r.rpush(key, message)
-    r.ltrim(key, -SESSION_QUEUE_MAX_LEN, -1)
-    r.expire(key, 3600)
+    with r.pipeline(transaction=True) as pipe:
+        pipe.rpush(key, message).ltrim(key, -SESSION_QUEUE_MAX_LEN, -1).expire(key, 3600)
+        pipe.execute()
 
 def get_history_messages(session_id: str):
     if os.getenv('ENABLE_HISTORY', 'false').lower() != 'true':

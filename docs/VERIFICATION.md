@@ -1,29 +1,72 @@
 # Verification scope
 
-Run `python3 scripts/check_all.py` from the repository root. It uses the current Python interpreter, isolates each project in its own process, disables external agent services, and stops on the first failed command.
+## Local verification for the engineering revision
 
-| Project | Test methods | Coverage represented |
-| --- | ---: | --- |
-| Risk monitor | 23 | Date ranges, mocked leases, failure aggregation, ratio/yield evaluation, asset normalization and configuration validation |
-| Wealth agent | 8 | External-service configuration, explicit adapter identity, plus 12 synthetic data-tool cases and invalid/missing-data checks |
-| Business analytics agent | 12 | External-service configuration, metric totals, growth, zero denominators, duplicate observations, local HTTP contracts and bound SQL access |
-| Database job mutex | 2 | SQLite exclusion, lease expiry/stale release and invalid lease duration |
+Python 3.13 was used locally. Tests below use synthetic data and no model credentials.
 
-All four directories also contain a runnable synthetic demo and a privacy-pattern scanner that parses Python source for syntax. The root GitHub Actions workflow runs the checks for each project on Python 3.11 and 3.13. Workflows nested inside project folders are only relevant if a project is later extracted into its own repository.
+| Check | Executed result | What it establishes |
+| --- | --- | --- |
+| Standard-library project suites | 54 tests passed: risk 30, wealth 8, operations 14, mutex 2 | Deterministic business rules, DAO parameter binding, batch rollback, risk result aggregation, local HTTP contracts and lease behavior |
+| Dependency-backed agent suites | 33 tests passed: wealth 20, operations 13 | Real FastAPI validation/SSE and LangChain orchestration with injected model/tool responses; cancellation, timeouts, request isolation, extraction and transport boundaries; mocked speech completion |
+| Risk application adapters | 5 tests passed | Mapping, account scope, whitelist and Excel import contracts |
+| Browser E2E | 3 tests passed in installed Chrome | Mobile branch selection, failure clearing/retry and empty-year state through the real local server |
+| Extraction output contracts | 8/8 fixtures passed | Recorded synthetic outputs are accepted/rejected by the extraction schema as expected; **not model accuracy** |
+| Lint / formatting | Passed | Whole-tree syntax/undefined-name lint; stronger lint and formatting on the explicit boundary modules in the quality script |
+| Strict typing | Passed for 2 modules | Metric domain types and extracted entity schema; **not whole-tree strict typing** |
+| Dependency consistency | `pip check` passed; Python 3.11 dry-run resolution succeeded | Installed dependencies agree; pinned service packages resolve for the Docker/CI Python version |
+| Dependency audit | No known vulnerabilities in the audited installed environment | Point-in-time advisory check; optional E2B/MinIO providers were not installed or audited |
+| Privacy / syntax / demos | Passed | Pattern scans, Python parsing and all four synthetic demos |
 
-## Interpretation
+The 92 Python test methods are focused checks, not a coverage percentage. Three standard-library HTTP tests skip if loopback sockets are forbidden; the local verification above ran with sockets enabled and no skips.
 
-- The 45 methods are focused checks, not whole-application coverage. Three browser HTTP methods skip when loopback sockets are unavailable.
-- The 12 wealth cases are newly authored examples against deterministic data operations, not LLM evaluations.
-- The 108-label catalog is a coverage design artifact, not a passed test suite.
-- Mocked lease tests and a SQLite example do not validate MySQL/PostgreSQL integration.
-- Syntax checks do not resolve or import every third-party dependency.
-- Privacy-pattern checks do not prove that every possible identifying detail is absent.
+## Reproduce
 
-Live model/data APIs, Redis, speech, sandbox and object storage require separate integration work. Database verification is scoped below. No production performance, user count, financial impact or benchmark result is asserted.
+At the root, without dependencies:
 
-## Workflow extension
+```bash
+python3 scripts/check_all.py
+```
 
-The risk extension added 16 standard-library tests (23 risk tests) and five separate application-adapter tests. The database workflow has passed seven integration methods plus five adapter methods on each of MySQL 8.4 and PostgreSQL 16. Coverage includes transactional imports, rollback, result upserts, classification mapping, account aggregation and concurrent leases. This does not validate every inherited domain query or external reference-data service.
+For each agent, use its own virtual environment from that project's directory:
 
-The business-analytics browser demo adds five focused methods: three exercise the actual local HTTP endpoints and two exercise the SQLite boundary. In environments that prohibit loopback sockets, the HTTP class skips and the repository checks still run. Neither these tests nor the UI represent a live LLM evaluation.
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements.txt
+# Wealth only, for the optional speech contract tests:
+# python -m pip install -r requirements-speech.txt
+python -m unittest discover -s service_tests -v
+# Wealth only:
+# python evals/evaluate_contracts.py
+```
+
+The API tests exercise the actual supervisor → async specialist → tool path with a scripted model. They do not contact a model provider or establish routing quality on unseen questions. The 12 legacy synthetic wealth cases test deterministic tools; the 108-label catalog is a coverage design artifact.
+
+Root quality checks:
+
+```bash
+python -m pip install -r requirements-dev.txt pydantic==2.11.3
+python scripts/check_quality.py
+```
+
+Browser checks from `business-analytics-agent/` require Node 22+, pnpm and Python 3.11+:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+Set `PLAYWRIGHT_CHANNEL=chrome` to use an installed Chrome. Frontend assets are plain HTML/CSS/JavaScript; there is no bundler or production compilation step.
+
+Risk adapter checks require `requirements.txt` and `requirements-import.txt`, then `python -m unittest discover -s adapter_tests -v`.
+
+## CI and limits
+
+- `portfolio.yml`: privacy/syntax, offline tests and demos on Python 3.11/3.13.
+- `engineering.yml`: dependency-backed agents on both Python versions, focused quality checks, browser E2E, and agent Docker builds with health checks.
+- `database.yml`: seven real-database integration methods and five adapter methods per MySQL 8.4/PostgreSQL 16 configuration.
+
+Docker and live database services were unavailable locally for this revision; their new-image and database integration results must be read from CI. Earlier database runs are not evidence for the changed query adapter. DAO capture tests check SQL/value separation and parameter order, not the business meaning of every inherited query.
+
+Live model/data APIs, Redis, speech provider, E2B and object storage remain unverified. Speech tests use a fake socket. Dependency pins describe a tested resolution, not immutable hashes or a security guarantee. Privacy scans cannot prove absence of all identifying information or clear previously published Git history. No production latency, user count, financial impact or live accuracy is asserted.

@@ -1,3 +1,4 @@
+from util.http_util import UpstreamError
 from datetime import datetime, timedelta
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
@@ -32,6 +33,8 @@ def summary_info(token, kwargs):
         result['tool_resp'] = {'card': 'reportDownCard', 'report_date': report_date, 'branchList': [{'orgCode': company_code, 'orgName': company_name}]}
         result['function_response'] = function_response
         return result
+    except UpstreamError:
+        raise
     except Exception as e:
         logger.error('Application event')
         return f'未获取到具体的分公司信息，请用户重新提供正确的分公司名称或代码~'

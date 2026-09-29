@@ -1,3 +1,4 @@
+from util.http_util import UpstreamError
 from typing import Any, List, Dict
 import asyncio
 from config import get_project_api_uri
@@ -220,7 +221,7 @@ async def get_cust_info(arguments: dict) -> Any:
                 return (f'''你所填的值，不是符合要求的enum值, 请根据用户需求重新填写''', None)
         else:
             return ('你没有提供正确客户姓名或者客户号，请提供正确的客户姓名或客户号进行查询。', None)
-    except TokenInvalidError:
+    except (TokenInvalidError, UpstreamError):
         raise
     except Exception as e:
         logger.error('Application event')

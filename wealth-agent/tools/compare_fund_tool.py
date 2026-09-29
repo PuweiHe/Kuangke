@@ -1,6 +1,7 @@
+from util.http_util import UpstreamError
 import asyncio
 from typing import Any, List, Dict
-from config import get_project_api_uri
+from config import get_project_api_uri, get_configuration
 from langchain.tools import tool
 from util.http_util import http_execute_async
 from config.logger import logger
@@ -115,7 +116,7 @@ async def compare_funds(arguments: dict) -> Any:
                 return (_ERROR_MESSAGE, None)
         else:
             return (_ERROR_MESSAGE, None)
-    except TokenInvalidError:
+    except (TokenInvalidError, UpstreamError):
         raise
     except Exception as e:
         logger.error('Application event')

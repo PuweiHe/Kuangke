@@ -1,3 +1,4 @@
+from util.http_util import UpstreamError
 from util.adapter_identity import get_data_api_user_id
 from typing import Any, List, Dict
 import asyncio
@@ -366,7 +367,7 @@ async def get_fund_info(arguments: dict) -> Any:
                 return (f'''你所填的值，不是符合要求的enum值, 请根据用户需求重新填写''', None)
         else:
             return ('你没有提供正确基金名称或者基金代码，请提供正确的基金名称或基金代码进行查询。', None)
-    except TokenInvalidError:
+    except (TokenInvalidError, UpstreamError):
         raise
     except Exception as e:
         logger.error('Application event')

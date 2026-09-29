@@ -1,6 +1,7 @@
 const yearSelect = document.querySelector('#year');
 const branchSelect = document.querySelector('#branch');
 const status = document.querySelector('#status');
+const retry = document.querySelector('#retry');
 const output = {
   total: document.querySelector('#total'),
   count: document.querySelector('#count'),
@@ -15,7 +16,7 @@ function percent(value) {
 }
 
 async function jsonResponse(url) {
-  const response = await fetch(url);
+  const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || 'Request failed');
   return data;
@@ -43,6 +44,8 @@ function render(report) {
 
 async function loadReport(resetBranch = false) {
   status.textContent = 'Loading metrics…';
+  retry.hidden = true;
+  document.querySelector('.workspace').setAttribute('aria-busy', 'true');
   yearSelect.disabled = true;
   branchSelect.disabled = true;
   try {
@@ -57,8 +60,11 @@ async function loadReport(resetBranch = false) {
     render(report);
     status.textContent = 'Showing local sample data';
   } catch (error) {
+    clearReport();
+    retry.hidden = false;
     status.textContent = `Unable to load: ${error.message}`;
   } finally {
+    document.querySelector('.workspace').setAttribute('aria-busy', 'false');
     yearSelect.disabled = false;
     branchSelect.disabled = false;
   }
@@ -67,13 +73,32 @@ async function loadReport(resetBranch = false) {
 yearSelect.addEventListener('change', () => loadReport(true));
 branchSelect.addEventListener('change', () => loadReport());
 
-(async () => {
+function clearReport() {
+  for (const key of ['total', 'count', 'share', 'growth']) output[key].textContent = '—';
+  output.rows.replaceChildren();
+  output.year.textContent = '';
+}
+
+retry.addEventListener('click', () => initialize());
+
+async function initialize() {
+  retry.hidden = true;
   try {
     const data = await jsonResponse('/api/years');
+    yearSelect.replaceChildren();
     data.years.forEach(year => yearSelect.add(new Option(String(year), String(year))));
     if (data.years.length) await loadReport(true);
-    else status.textContent = 'No sample years available';
+    else {
+      clearReport();
+      yearSelect.disabled = true;
+      branchSelect.disabled = true;
+      status.textContent = 'No sample years available';
+    }
   } catch (error) {
+    clearReport();
+    retry.hidden = false;
     status.textContent = `Unable to load: ${error.message}`;
   }
-})();
+}
+
+initialize();

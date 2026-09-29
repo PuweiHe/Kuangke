@@ -8,7 +8,7 @@ This guide points to code that a reviewer can inspect quickly. The data and runn
 
 1. [Browser controls and states](../business-analytics-agent/portfolio_demo/app.js) request available years, send the selected year and branch to `/api/metrics`, and render loading, error, missing-baseline, and successful results.
 2. [HTTP handler](../business-analytics-agent/portfolio_demo/server.py) validates the query and returns JSON with explicit 400/404 responses. Its SQLite repository uses a unique branch/year key and bound query values.
-3. [Metric calculation](../business-analytics-agent/demo.py) computes the total, revenue share, and growth. The missing 2024 observation for `BRANCH003` remains undefined rather than becoming zero growth.
+3. [Metric calculation](../business-analytics-agent/metrics.py) computes the total, revenue share, and growth. The missing 2024 observation for `BRANCH003` remains undefined rather than becoming zero growth.
 4. [HTTP and repository tests](../business-analytics-agent/tests/test_portfolio_demo.py) cover that case, invalid queries, duplicate observations, and an attempted SQL-injection string.
 
 Run it from `business-analytics-agent/` with `python3 -m portfolio_demo.server`, then open `http://127.0.0.1:8765/`. Choose 2025 and `BRANCH003`; the synthetic result is a 20% share and **No baseline** growth. This path runs locally without a model or credentials.
@@ -31,3 +31,9 @@ The separate [operations agent](../business-analytics-agent/agent/mutil_agent.py
 The [risk monitor workflow](../investment-risk-monitor-unified/docs/CONFIGURATION_WORKFLOW.md) shows how a configured rule becomes a dated result. [Database integration tests](../investment-risk-monitor-unified/integration_tests/test_database.py) cover adapted import, result, and lease paths on MySQL and PostgreSQL. The [standalone lease example](../database-job-mutex/README.md) isolates the stale-owner release problem.
 
 Run `python3 scripts/check_all.py` at the repository root for offline checks. Read [verification scope](VERIFICATION.md) for what those checks establish and [contribution scope](CONTRIBUTIONS.md) for the distinction between internship work and public reconstructions.
+
+## 4. Inspect the reliability changes
+
+[Dependency-backed service tests](../wealth-agent/service_tests/) exercise real FastAPI routes and real LangChain graphs with scripted responses. Start with `test_graph.py`, then the timeout, cancellation and same-ID isolation cases. [Browser E2E tests](../business-analytics-agent/e2e/) verify failure recovery through the visible UI. [DAO tests](../investment-risk-monitor-unified/tests/test_dao_parameters.py) check SQL/value separation, while [batch tests](../investment-risk-monitor-unified/tests/test_query_adapter.py) check transactional rollback.
+
+[Engineering decisions and interview notes](ENGINEERING_REVIEW.md) explain why these changes were made and which production claims the tests cannot support.

@@ -15,3 +15,14 @@ class MetricTests(unittest.TestCase):
         with self.assertRaises(ValueError): summarize([row,row],2025)
     def test_empty_year(self):
         self.assertEqual(summarize([],2025)["branches"],[])
+
+class InputValidationTests(unittest.TestCase):
+    def test_invalid_numbers_and_identifiers(self):
+        base = {'branch_id':'BRANCH001','year':2025,'revenue_million':1}
+        for field, value in [('revenue_million', float('nan')), ('revenue_million',float('inf')), ('revenue_million',True), ('revenue_million',-1), ('year',True), ('branch_id','')]:
+            with self.subTest(field=field,value=value),self.assertRaises(ValueError):
+                summarize([{**base,field:value}],2025)
+
+    def test_total_overflow_is_rejected(self):
+        with self.assertRaises(ValueError):
+            summarize([{'branch_id':name,'year':2025,'revenue_million':1e308} for name in ['A','B']],2025)

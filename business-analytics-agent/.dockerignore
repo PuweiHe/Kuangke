@@ -5,3 +5,9 @@ __pycache__
 .venv
 logs
 *.log
+node_modules
+.mypy_cache
+.ruff_cache
+service_tests
+e2e
+test-results

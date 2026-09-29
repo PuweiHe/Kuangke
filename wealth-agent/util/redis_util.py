@@ -20,7 +20,7 @@ async def _get_redis_client():
             _redis_client = redis.Redis(connection_pool=redis_pool)
             await _redis_client.ping()
             log.info('Application event')
-        except Exception as e:
+        except Exception:
             log.error('Application event')
             raise
     return _redis_client
@@ -32,10 +32,10 @@ async def add_message_to_redis(session_id: str, human_message: str, ai_response:
         r = await _get_redis_client()
         key = f'''etf_conversation:{session_id}'''
         message = json.dumps({'human': human_message, 'ai': ai_response}, ensure_ascii=False)
-        await r.rpush(key, message)
-        await r.ltrim(key, -SESSION_QUEUE_MAX_LEN, -1)
-        await r.expire(key, 3600)
-    except Exception as e:
+        async with r.pipeline(transaction=True) as pipe:
+            pipe.rpush(key, message).ltrim(key, -SESSION_QUEUE_MAX_LEN, -1).expire(key, 3600)
+            await pipe.execute()
+    except Exception:
         log.error('Application event')
 
 async def get_history_messages(session_id: str, max_messages: int=None) -> str:
@@ -51,6 +51,6 @@ async def get_history_messages(session_id: str, max_messages: int=None) -> str:
             data = json.loads(msg.decode('utf-8'))
             history_parts.append(f'''human: {data.get('human', '')}\nassistant: {data.get('ai', '')}''')
         return '\n'.join(history_parts)
-    except Exception as e:
+    except Exception:
         log.error('Application event')
         return ''

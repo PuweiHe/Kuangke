@@ -1,13 +1,11 @@
-"""Verify monitor failures remain failures at the runner boundary."""
+"""Failures remain visible across a batch and across a rule's dimensions."""
 
 import importlib.util
 import sys
 import types
 import unittest
 from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+from unittest.mock import patch
 
 
 class FakeConfig:
@@ -27,29 +25,56 @@ class FakeConfigDAO:
         return [FakeConfig()]
 
 
-class FakeMonitor:
-    def execute(self, **kwargs):
-        return {"status": "error", "error": "synthetic failure", "saved_count": 0}
+def runner():
+    logger = types.SimpleNamespace(
+        **{
+            name: lambda *a, **k: None
+            for name in ("info", "debug", "warning", "error", "exception")
+        }
+    )
+    mocks = {
+        "loguru": types.SimpleNamespace(logger=logger),
+        "dao.risk_types_dao": types.SimpleNamespace(RiskTypesDAO=lambda: object()),
+        "dao.monitor_config_dao": types.SimpleNamespace(MonitorConfigDAO=FakeConfigDAO),
+        "models.monitor_rule_config": types.SimpleNamespace(MonitorRuleConfig=FakeConfig),
+    }
+    with patch.dict(sys.modules, mocks):
+        spec = importlib.util.spec_from_file_location(
+            "runner_under_test", Path(__file__).resolve().parents[1] / "monitors/monitor_runner.py"
+        )
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.MonitorRunner()
 
 
 class RunnerContractTests(unittest.TestCase):
     def test_failed_monitor_is_counted_as_failure(self):
-        logger = types.SimpleNamespace(**{name: lambda *a, **k: None for name in ("info", "debug", "warning", "error", "exception")})
-        sys.modules["loguru"] = types.SimpleNamespace(logger=logger)
-        sys.modules["dao.risk_types_dao"] = types.SimpleNamespace(RiskTypesDAO=lambda: object())
-        sys.modules["dao.monitor_config_dao"] = types.SimpleNamespace(MonitorConfigDAO=FakeConfigDAO)
-        sys.modules["models.monitor_rule_config"] = types.SimpleNamespace(MonitorRuleConfig=FakeConfig)
-        spec = importlib.util.spec_from_file_location("runner_under_test", ROOT / "monitors" / "monitor_runner.py")
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        runner = module.MonitorRunner()
-        runner._load_monitor_class = lambda *_: FakeMonitor()
-        result = runner.run("2025-01-02")
-        self.assertEqual(result["status"], "completed")
+        subject = runner()
+        subject._load_monitor_class = lambda *_: types.SimpleNamespace(
+            execute=lambda **_: {"status": "error", "saved_count": 0}
+        )
+        result = subject.run("2025-01-02")
         self.assertEqual(result["success_count"], 0)
         self.assertEqual(result["fail_count"], 1)
         self.assertEqual(result["results"][0]["status"], "error")
 
+    def test_earlier_dimension_failure_is_not_hidden_by_last_success(self):
+        subject = runner()
+        subject.monitor_config_dao.get_trust_dimension_config = lambda **_: [
+            FakeConfig(),
+            FakeConfig(),
+        ]
+        results = iter([{"status": "error"}, {"status": "success"}])
+        subject._execute_single_monitor = lambda **_: next(results)
+        result = subject.run_by_monitor_id("DEMO-FAIL-0001", "20250102")
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(result["fail_count"], 1)
+        self.assertEqual(len(result["results"]), 2)
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_single_dimension_contract_is_preserved(self):
+        subject = runner()
+        subject._execute_single_monitor = lambda **_: {"status": "success", "saved_count": 2}
+        self.assertEqual(
+            subject.run_by_monitor_id("DEMO-FAIL-0001", "20250102"),
+            {"status": "success", "saved_count": 2},
+        )

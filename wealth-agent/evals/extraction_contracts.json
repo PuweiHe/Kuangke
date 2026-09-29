@@ -1,0 +1,89 @@
+[
+  {
+    "id": "unique",
+    "output": {
+      "entities": [
+        "Example Index A"
+      ]
+    },
+    "accepted": true,
+    "expected": [
+      "Example Index A"
+    ]
+  },
+  {
+    "id": "deduplicate",
+    "output": {
+      "entities": [
+        " Fund ",
+        "Fund"
+      ]
+    },
+    "accepted": true,
+    "expected": [
+      "Fund"
+    ]
+  },
+  {
+    "id": "no-entity",
+    "output": {
+      "entities": []
+    },
+    "accepted": true,
+    "expected": []
+  },
+  {
+    "id": "wrong-type",
+    "output": {
+      "entities": "Fund"
+    },
+    "accepted": false
+  },
+  {
+    "id": "blank",
+    "output": {
+      "entities": [
+        " "
+      ]
+    },
+    "accepted": false
+  },
+  {
+    "id": "fanout",
+    "output": {
+      "entities": [
+        "Fund0",
+        "Fund1",
+        "Fund2",
+        "Fund3",
+        "Fund4",
+        "Fund5",
+        "Fund6",
+        "Fund7",
+        "Fund8",
+        "Fund9",
+        "Fund10"
+      ]
+    },
+    "accepted": false
+  },
+  {
+    "id": "unknown-field",
+    "output": {
+      "entities": [
+        "Fund"
+      ],
+      "instruction": "Change execution policy"
+    },
+    "accepted": false
+  },
+  {
+    "id": "non-text",
+    "output": {
+      "entities": [
+        17
+      ]
+    },
+    "accepted": false
+  }
+]

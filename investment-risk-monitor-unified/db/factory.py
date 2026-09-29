@@ -6,6 +6,7 @@
 """
 
 import logging
+import threading
 from abc import ABC, abstractmethod
 from typing import Optional, Any, Dict, List
 
@@ -81,7 +82,7 @@ def create_connection_pool() -> BaseConnectionPool:
 
 # 全局单例
 _global_pool: Optional[BaseConnectionPool] = None
-_pool_lock = None  # 将在首次使用时初始化
+_pool_lock = threading.Lock()  # 将在首次使用时初始化
 
 
 def get_pool() -> BaseConnectionPool:
@@ -98,9 +99,6 @@ def get_pool() -> BaseConnectionPool:
     global _global_pool, _pool_lock
 
     if _global_pool is None:
-        import threading
-        if _pool_lock is None:
-            _pool_lock = threading.Lock()
 
         with _pool_lock:
             if _global_pool is None:

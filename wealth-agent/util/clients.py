@@ -9,7 +9,7 @@ def get_http_client() -> httpx.AsyncClient:
 
 async def init_http_clients():
     global _http_client
-    _http_client = httpx.AsyncClient(timeout=httpx.Timeout(60.0, connect=10.0), limits=httpx.Limits(max_connections=200, max_keepalive_connections=100, keepalive_expiry=30), http2=False, follow_redirects=True)
+    _http_client = httpx.AsyncClient(timeout=httpx.Timeout(20.0, connect=5.0), limits=httpx.Limits(max_connections=200, max_keepalive_connections=100, keepalive_expiry=30), http2=False, follow_redirects=False)
 
 async def close_http_clients():
     global _http_client

@@ -29,6 +29,26 @@ Choose 2025 and `BRANCH003`: the sample branch contributes 20% of annual revenue
 
 **For SDE/SWE review:** run the browser demo, then inspect the risk monitor's database tests and the mutex's concurrency case. **For agent engineering review:** inspect the two domain agent architectures after the runnable examples; their live model and customer-data adapters require external services.
 
+## Engineering worth inspecting
+
+- **Agent reliability:** real async supervisor/specialist execution, validated entity extraction, request-local cards, explicit SSE errors and bounded calls. [Service tests](wealth-agent/service_tests/) use the actual orchestration graph with scripted model responses.
+- **Database correctness:** bound values across the risk DAOs, transactional batch writes and visible multi-dimension failures. [Regression tests](investment-risk-monitor-unified/tests/) exercise adversarial filters and rollback.
+- **Full-stack behavior:** typed metric rules, safe missing baselines, failure/retry states and [three browser E2E cases](business-analytics-agent/e2e/).
+- **Reviewable evidence:** 92 focused Python test methods, three browser tests and eight extraction-contract fixtures passed locally. These are not live-model accuracy or production-performance measurements. [Exact scope and commands](docs/VERIFICATION.md).
+
+The [engineering review](docs/ENGINEERING_REVIEW.md) contains the architecture, implementation decisions, remaining debt and interview discussion points. The [initial audit](docs/ENGINEERING_AUDIT.md) records the defects that motivated this revision.
+
+## Stack by responsibility
+
+| Layer | Implementation |
+| --- | --- |
+| Browser | HTML, CSS and JavaScript; responsive synthetic analytics UI |
+| APIs | Python, FastAPI, Pydantic and Server-Sent Events; standard-library local demo server |
+| Agents | LangChain/LangGraph, OpenAI-compatible model adapters, domain tools |
+| Data | SQLite demo; MySQL/PostgreSQL risk persistence; optional Redis history |
+| Verification | unittest, Playwright, Ruff, focused mypy; GitHub Actions |
+| Packaging | Resolved Python dependency pins; nonroot agent Docker images |
+
 ## My role and the public reconstruction
 
 My internship work included clarifying financial-institution requirements, implementing backend and frontend functionality, writing SQL for data-driven features, and developing domain-agent capabilities. The table above connects those areas to inspectable examples. [Contribution and scope notes](docs/CONTRIBUTIONS.md) distinguish this stated role from functionality added for the public portfolio; they do not attribute every retained line of a team codebase to one person. Client identities and deployment details are intentionally absent from this public copy.
@@ -51,7 +71,7 @@ The repository-wide publishable-tree check also rejects common credential format
 
 | Requirement | Engineering choice | Evidence |
 | --- | --- | --- |
-| A branch's missing prior year must not read as zero growth. | Preserve an undefined growth value through SQL, API, and browser presentation. | [Metric implementation](business-analytics-agent/demo.py), [HTTP checks](business-analytics-agent/tests/test_portfolio_demo.py) |
+| A branch's missing prior year must not read as zero growth. | Preserve an undefined growth value through SQL, API, and browser presentation. | [Metric implementation](business-analytics-agent/metrics.py), [HTTP checks](business-analytics-agent/tests/test_portfolio_demo.py) |
 | An absent risk position must not read as a safe zero exposure. | Emit a data-quality result with a null indicator and an explicit status. | [Ratio evaluator](investment-risk-monitor-unified/core/holding_ratio.py), [database check](investment-risk-monitor-unified/integration_tests/test_database.py) |
 | A batch must report failed rules even after it finishes iterating. | Aggregate execution status at the runner boundary. | [Runner regression test](investment-risk-monitor-unified/tests/test_runner_contract.py) |
 | A stale worker must not release a successor's lease. | Require the owner token for release. | [Lease implementation](investment-risk-monitor-unified/utils/distributed_lock.py), [concurrency test](investment-risk-monitor-unified/integration_tests/test_database.py) |

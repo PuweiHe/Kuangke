@@ -1,3 +1,4 @@
+from util.http_util import UpstreamError
 import pandas
 from datetime import datetime
 from langchain_core.runnables import RunnableConfig
@@ -94,6 +95,8 @@ def summary_info(token, kwargs):
                 response = http_execute(get_project_api_uri('operations', 'mge_org_info') + f'''/ORG''', 'GET', token, sec_params)
                 if response and len(response) > 0:
                     sec = response.get('grouping')
+            except UpstreamError:
+                raise
             except Exception as e:
                 logger.error('Application event')
             branch_list.append({'orgCode': basic_params.get('parentOrgCode'), 'orgName': basic_params.get('parentOrgName'), 'grouping': sec})
@@ -169,6 +172,8 @@ def summary_info(token, kwargs):
                 response = http_execute(get_project_api_uri('operations', 'mge_org_info') + f'''/ORG''', 'GET', token, sec_params)
                 if response and len(response) > 0:
                     sec = response.get('grouping')
+            except UpstreamError:
+                raise
             except Exception as e:
                 logger.error('Application event')
             branch_list.append({'orgCode': basic_params.get('parentOrgCode'), 'orgName': basic_params.get('parentOrgName'), 'grouping': sec})
@@ -270,6 +275,8 @@ def summary_info(token, kwargs):
                 response = http_execute(get_project_api_uri('operations', 'mge_org_info') + f'''/ORG''', 'GET', token, sec_params)
                 if response and len(response) > 0:
                     sec = response.get('grouping')
+            except UpstreamError:
+                raise
             except Exception as e:
                 logger.error('Application event')
             branch_list.append({'orgCode': basic_params.get('parentOrgCode'), 'orgName': basic_params.get('parentOrgName'), 'grouping': sec})
@@ -385,6 +392,8 @@ def summary_info(token, kwargs):
                 response = http_execute(get_project_api_uri('operations', 'mge_org_info') + f'''/ORG''', 'GET', token, sec_params)
                 if response and len(response) > 0:
                     sec = response.get('grouping')
+            except UpstreamError:
+                raise
             except Exception as e:
                 logger.error('Application event')
             branch_list.append({'orgCode': basic_params.get('parentOrgCode'), 'orgName': basic_params.get('parentOrgName'), 'grouping': sec})

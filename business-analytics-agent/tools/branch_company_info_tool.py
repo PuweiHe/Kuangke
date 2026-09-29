@@ -1,12 +1,10 @@
-import json
-import itertools
+from util.http_util import UpstreamError
 import pandas
 from datetime import datetime
 from config.logger import logger
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
 from config import get_project_api_uri
-from util.general_util import is_contains_chinese, is_english_and_digit, has_special_char
 from util.http_util import http_execute
 
 @tool('branch_company_info_tool', args_schema={'type': 'object', 'properties': {'company_code': {'type': 'string', 'default': None, 'description': '分公司代码'}, 'company_name': {'type': 'string', 'default': None, 'description': '分公司名称', 'examples': []}, 'company_scope': {'type': 'boolean', 'default': False, 'description': '是否只查询分公司。如果查询只分公司,该字段填写True;如果查询营业部该字段填写False; 当business_name参数不为None时，该字段填写False。'}, 'business_code': {'type': 'string', 'default': None, 'description': '营业部代码'}, 'business_name': {'type': 'string', 'default': None, 'description': '营业部名称', 'examples': []}, 'scope': {'type': 'boolean', 'default': False, 'description': '是否查询所有的营业部。如果查询所有的营业部，该字段填写True, 如果查询部分营业部，该字段填写False, 当business_name参数不为None时，该字段填写False。'}, 'screening': {'type': 'boolean', 'default': False, 'description': '是否筛选条件。如果是筛选所有的营业部，该字段填写True。'}, 'info_list': {'type': 'object', 'description': '基本信息', 'properties': {'orgType': {'type': 'string', 'default': None, 'description': '机构性质'}, 'orgTypeCode': {'type': 'string', 'default': None, 'description': '机构性质代码'}, 'setupDate': {'type': 'string', 'default': None, 'description': '成立时间'}, 'grouping': {'type': 'string', 'default': None, 'description': '组别、SEC分组'}, 'orgLeader': {'type': 'string', 'default': None, 'description': '机构负责人'}, 'leaderStaffId': {'type': 'string', 'default': None, 'description': '机构负责人ID'}}}}, 'required': ['company_code', 'company_name', 'company_scope', 'business_code', 'business_name', 'scope', 'info_list']})
@@ -72,7 +70,9 @@ def summary_info(token, kwargs):
             response = http_execute(get_project_api_uri('operations', 'mge_org_info') + f'''/ORG''', 'GET', token, sec_params)
             if response and len(response) > 0:
                 sec = response.get('grouping')
-        except Exception as e:
+        except UpstreamError:
+            raise
+        except Exception:
             logger.error('Application event')
         branch_list.append({'orgCode': params.get('parentOrgCode'), 'orgName': params.get('parentOrgName'), 'grouping': sec})
         try:
@@ -87,7 +87,9 @@ def summary_info(token, kwargs):
                 show_info_list = show_info_list + response
                 for res in response:
                     branch_list.append({'orgCode': res.get('orgCode'), 'orgName': res.get('orgName'), 'grouping': res.get('grouping')})
-        except Exception as e:
+        except UpstreamError:
+            raise
+        except Exception:
             logger.error('Application event')
     else:
         res = http_execute(get_project_api_uri('operations', 'mge_org_info') + f'''/{branch_path}''', 'GET', token, params)

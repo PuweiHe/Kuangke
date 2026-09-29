@@ -5,8 +5,6 @@ import uuid
 import datetime
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
-from e2b_code_interpreter import Sandbox
-from minio import Minio
 from dotenv import load_dotenv
 from config.logger import logger as log
 load_dotenv()
@@ -26,6 +24,7 @@ def _get_storage_client():
     if _minio_client is None:
         if not all([MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET]):
             raise RuntimeError('Object storage is not configured')
+        from minio import Minio
         _minio_client = Minio(MINIO_ENDPOINT, access_key=MINIO_ACCESS_KEY, secret_key=MINIO_SECRET_KEY, secure=MINIO_SECURE)
     return _minio_client
 STYLE_PREAMBLE = "\nimport matplotlib\nimport matplotlib.pyplot as plt\nplt.rcParams['font.sans-serif'] = ['Noto Sans CJK SC', 'WenQuanYi Zen Hei']\nplt.rcParams['axes.unicode_minus'] = False\nplt.rcParams['axes.prop_cycle'] = plt.cycler(color=['#ED7B2F', '#5B8FF9', '#5AD8A6', '#F6BD16', '#E8684A'])\nplt.rcParams['figure.figsize'] = (10, 6)\nplt.rcParams['figure.dpi'] = 120\nplt.rcParams['axes.spines.top'] = False\nplt.rcParams['axes.spines.right'] = False\nplt.rcParams['axes.grid'] = True\nplt.rcParams['grid.alpha'] = 0.3\n"
@@ -42,14 +41,17 @@ def sandbox_tool(config: RunnableConfig, **kwargs) -> dict:
     """Sandbox tool. Use validated tool arguments and return adapter results."""
     from config import require_external_services
     require_external_services()
+    if os.getenv('ENABLE_CODE_EXECUTION', 'false').lower() != 'true':
+        return [{'function_response': 'Code execution is disabled by the operator.'}]
+    from e2b_code_interpreter import Sandbox
     arguments = kwargs
     code = arguments.get('code')
     output_type = arguments.get('output_type')
-    if not code:
+    if not isinstance(code, str) or not code.strip() or len(code) > 16000:
         return [{'function_response': '未提供可执行代码'}]
     try:
-        with Sandbox.create(api_key=E2B_API_KEY) as sandbox:
-            execution = sandbox.run_code(STYLE_PREAMBLE + '\n' + code)
+        with Sandbox.create(api_key=E2B_API_KEY, timeout=60) as sandbox:
+            execution = sandbox.run_code(STYLE_PREAMBLE + '\n' + code, timeout=20)
             error = execution.error
             results = execution.results
             stdout = ''.join(execution.logs.stdout) if execution.logs and execution.logs.stdout else ''
@@ -57,7 +59,7 @@ def sandbox_tool(config: RunnableConfig, **kwargs) -> dict:
             image_b64_list = [r.png for r in results if getattr(r, 'png', None)]
     except Exception as e:
         log.error('Application event')
-        return [{'function_response': f'代码执行失败: {e}'}]
+        return [{'function_response': 'Isolated execution failed'}]
     if error:
         err = f'{error.name}: {error.value}'
         log.warning('Application event')

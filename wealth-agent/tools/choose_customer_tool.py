@@ -1,3 +1,4 @@
+from util.http_util import UpstreamError
 from typing import Any, List, Dict
 import asyncio
 from config import get_project_api_uri
@@ -72,7 +73,7 @@ async def get_choose_customer_info(arguments: dict) -> Any:
         else:
             logger.error('Application event')
             return (_ERROR_MESSAGE, None)
-    except TokenInvalidError:
+    except (TokenInvalidError, UpstreamError):
         raise
     except Exception as e:
         logger.error('Application event')
