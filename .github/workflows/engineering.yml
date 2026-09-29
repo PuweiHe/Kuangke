@@ -73,4 +73,6 @@ jobs:
           docker build -t portfolio-service ${{ matrix.project }}
           docker run -d --name portfolio-service -p 8000:8000 portfolio-service
           trap 'docker logs portfolio-service; docker rm -f portfolio-service' EXIT
-          curl --fail --retry 15 --retry-connrefused --retry-delay 2 http://localhost:8000/healthz
+          # Docker may accept the connection before the application starts listening.
+          curl --fail --show-error --silent --retry 15 --retry-all-errors \
+            --retry-delay 2 --retry-max-time 60 --max-time 5 http://localhost:8000/healthz
