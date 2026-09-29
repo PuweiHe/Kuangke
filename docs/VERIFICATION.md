@@ -5,7 +5,7 @@ Run `python3 scripts/check_all.py` from the repository root. It uses the current
 | Project | Test methods | Coverage represented |
 | --- | ---: | --- |
 | Risk monitor | 23 | Date ranges, mocked leases, failure aggregation, ratio/yield evaluation, asset normalization and configuration validation |
-| Wealth agent | 6 | External-service configuration plus 12 synthetic data-tool cases and invalid/missing-data checks |
+| Wealth agent | 8 | External-service configuration, explicit adapter identity, plus 12 synthetic data-tool cases and invalid/missing-data checks |
 | Business analytics agent | 12 | External-service configuration, metric totals, growth, zero denominators, duplicate observations, local HTTP contracts and bound SQL access |
 | Database job mutex | 2 | SQLite exclusion, lease expiry/stale release and invalid lease duration |
 
@@ -13,7 +13,7 @@ All four directories also contain a runnable synthetic demo and a privacy-patter
 
 ## Interpretation
 
-- The 43 methods are focused checks, not whole-application coverage.
+- The 45 methods are focused checks, not whole-application coverage. Three browser HTTP methods skip when loopback sockets are unavailable.
 - The 12 wealth cases are newly authored examples against deterministic data operations, not LLM evaluations.
 - The 108-label catalog is a coverage design artifact, not a passed test suite.
 - Mocked lease tests and a SQLite example do not validate MySQL/PostgreSQL integration.
