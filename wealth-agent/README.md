@@ -2,6 +2,8 @@
 
 A generalized portfolio reconstruction of a financial research assistant. It retains entity resolution, bounded concurrent entity lookup, specialist agents for funds/managers/companies, structured data tools, request-scoped token forwarding, card responses, and streaming chat.
 
+The agent work served internal research at HuiDi Investment, Kuangke's wholly owned private fund subsidiary. [HuiDi reports over RMB 6 billion in assets under management](https://hdinvesting.cn/). This figure describes the organization, not the agent's usage or business impact.
+
 **Business scenario:** a user asks about an incomplete fund name or compares two products when one has no one-year return. The service architecture resolves candidate entities, routes fund/manager/company questions to specialist tools, and streams text or structured cards. The public synthetic cases make ambiguity, partial comparisons and missing history inspectable. They test deterministic tool behavior; live LLM routing and private data adapters are outside this runnable example.
 
 ```mermaid
